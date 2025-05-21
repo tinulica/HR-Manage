@@ -1,0 +1,27 @@
+.confirm-delete-modal .custom-modal-body {
+  padding: 20px 24px;
+  font-size: 15px;
+  color: #333;
+  line-height: 1.6;
+}
+
+.confirm-delete-modal strong {
+  color: #d92d20;
+}
+
+.confirm-delete-modal .custom-modal-footer {
+  padding: 16px 24px;
+  border-top: 1px solid #eee;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.custom-btn.danger {
+  background-color: #dc3545;
+  color: white;
+}
+
+.custom-btn.danger:hover {
+  background-color: #c82333;
+}

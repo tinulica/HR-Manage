@@ -1,0 +1,78 @@
+/* src/components/EntriesExport.css */
+
+.export-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.export-dropdown .btn.indigo {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 12px;
+  font-size: 14px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  background-color: #6366f1;
+  color: white;
+}
+
+.export-dropdown .btn.indigo svg {
+  margin-right: 6px;
+}
+
+.dropdown-panel {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 12px;
+  z-index: 100;
+  width: 220px;
+}
+
+.dropdown-panel h4 {
+  margin: 0 0 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+}
+
+.fields-list {
+  max-height: 180px;
+  overflow-y: auto;
+  margin-bottom: 12px;
+  padding-right: 4px;
+}
+
+.field-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 6px;
+  font-size: 14px;
+  color: #333;
+}
+
+.field-item input {
+  margin-right: 6px;
+}
+
+.dropdown-panel .btn.blue {
+  display: block;
+  width: 100%;
+  padding: 6px 0;
+  font-size: 14px;
+  border-radius: 6px;
+  border: none;
+  background-color: #3b82f6;
+  color: white;
+  cursor: pointer;
+}
+
+.dropdown-panel .btn.blue:disabled {
+  background-color: #93c5fd;
+  cursor: not-allowed;
+}

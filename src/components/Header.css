@@ -1,0 +1,85 @@
+.topbar {
+  background: #fff;
+  padding: 10px 20px;
+  border-bottom: 1px solid #e5e7eb;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  z-index: 100;
+  position: relative;
+}
+
+.topbar-profile {
+  position: relative;
+}
+
+.topbar-profile-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 6px 12px;
+  border-radius: 6px;
+  transition: background 0.2s ease;
+}
+
+.topbar-profile-btn:hover {
+  background-color: #f1f5f9;
+}
+
+.avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.username {
+  font-weight: 500;
+  color: #1e293b;
+  font-size: 14px;
+}
+
+.topbar-menu {
+  position: absolute;
+  right: 0;
+  top: 110%;
+  background: #fff;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+  border-radius: 8px;
+  overflow: hidden;
+  min-width: 180px;
+  padding: 8px 0;
+  z-index: 999;
+  animation: fadeIn 0.15s ease-in-out;
+}
+
+.topbar-menu button {
+  width: 100%;
+  padding: 10px 16px;
+  background: transparent;
+  border: none;
+  text-align: left;
+  font-size: 14px;
+  color: #374151;
+  transition: background 0.2s ease;
+}
+
+.topbar-menu button:hover {
+  background-color: #f9fafb;
+}
+
+.topbar-menu .logout {
+  color: #dc2626;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}

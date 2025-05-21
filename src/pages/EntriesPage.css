@@ -1,0 +1,104 @@
+/* src/pages/EntriesPage.css */
+
+.entries-page {
+  padding: 1rem;
+  font-family: sans-serif;
+}
+
+.actions-filters {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  margin-bottom: 1rem;
+}
+
+.left-controls .btn {
+  margin-right: 0.5rem;
+}
+
+.filters-inline {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.input {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 0.25rem;
+}
+
+.entries-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.entries-table th,
+.entries-table td {
+  border-bottom: 1px solid #e5e5e5;
+  padding: 0.75rem;
+  text-align: left;
+}
+
+.entries-table th {
+  background: #f7f7f7;
+}
+
+.icon-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.pagination-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1rem;
+}
+
+.pagination-controls button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-left: 0.5rem;
+  padding: 0.25rem;
+}
+
+.pagination-controls button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+/* Modal backdrop & box */
+
+.modal-backdrop {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-box {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  max-width: 360px;
+  width: 100%;
+}
+
+.modal-box .input {
+  width: 100%;
+  margin: 0.5rem 0;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}

@@ -1,0 +1,58 @@
+/* OrgSetup.css */
+body {
+  background-color: #F9FAFB;
+  font-family: 'Inter', sans-serif;
+  color: #0F172A;
+}
+
+.org-setup-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.org-setup-card {
+  background: white;
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+  max-width: 480px;
+  width: 100%;
+  text-align: center;
+}
+
+.org-setup-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+}
+
+.org-setup-input,
+.org-setup-textarea {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+}
+
+.org-setup-button {
+  width: 100%;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border-radius: 0.375rem;
+  border: none;
+  cursor: pointer;
+  background-color: #4F46E5;
+  color: white;
+  transition: background-color 0.2s ease;
+}
+
+.org-setup-button:hover {
+  background-color: #4338CA;
+}

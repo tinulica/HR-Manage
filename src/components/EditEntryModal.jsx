@@ -1,8 +1,10 @@
 // src/components/EditEntryModal.jsx
+// src/components/EditEntryModal.jsx
 import React, { useState, useEffect, useContext } from 'react';
 import './EditEntryModal.css';
 import imageCompression from 'browser-image-compression';
-import { SupabaseContext } from '../App';
+import SupabaseContext from '../contexts/SupabaseContext'; // ✅ Corrected import
+
 
 export default function EditEntryModal({ entry, onClose }) {
   const supabase = useContext(SupabaseContext);

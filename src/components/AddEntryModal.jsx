@@ -1,7 +1,7 @@
-import { useState } from 'react'
-import { useContext } from 'react';
-import { SupabaseContext } from '../App';
-import './AddEntryModal.css'
+import { useState, useContext } from 'react';
+import SupabaseContext from '../contexts/SupabaseContext';
+import './AddEntryModal.css';
+
 
 export default function AddEntryModal({ onClose, onAdded }) {
   const [form, setForm] = useState({

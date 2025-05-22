@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useContext } from 'react';
-import { SupabaseContext } from '../App';
+import SupabaseContext from '../contexts/SupabaseContext';
 import {
   ResponsiveContainer,
   PieChart,

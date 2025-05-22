@@ -13,19 +13,39 @@ serve(async (req) => {
       });
     }
 
+    // Basic email validation
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      return new Response(JSON.stringify({ error: "Invalid email" }), {
+        status: 400,
+      });
+    }
+
+    const authHeader = req.headers.get("Authorization");
+    if (!authHeader?.startsWith("Bearer ")) {
+      return new Response(JSON.stringify({ error: "Missing or invalid Authorization header" }), {
+        status: 401,
+      });
+    }
+    const jwt = authHeader.replace("Bearer ", "");
+
+    // Use anon/public key for user actions
     const supabase = createClient(
       Deno.env.get("SUPABASE_URL")!,
-      Deno.env.get("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ4dnV2aG5wcnpydGRiaXp6aWFiIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0NzMxNzU2OCwiZXhwIjoyMDYyODkzNTY4fQ.T8V5dTnPp7T3yvLBJIk_vwGSSOClJnxRPag13GbYTbU")!
+      Deno.env.get("SUPABASE_ANON_KEY")!,
+      {
+        global: {
+          headers: {
+            Authorization: `Bearer ${jwt}`,
+          },
+        },
+      }
     );
 
     // Get the current user invoking this request
-    const authHeader = req.headers.get("Authorization");
-    const jwt = authHeader?.replace("Bearer ", "") ?? "";
-
     const {
       data: { user },
       error: authError,
-    } = await supabase.auth.getUser(jwt);
+    } = await supabase.auth.getUser();
 
     if (authError || !user) {
       return new Response(JSON.stringify({ error: "Unauthorized" }), {
@@ -36,22 +56,26 @@ serve(async (req) => {
     const invited_by = user.id;
 
     // Insert into invites
-    const { error: insertError } = await supabase
+    const { data: invite, error: insertError } = await supabase
       .from("invites")
-      .insert([{ email, organization_id, invited_by }]);
+      .insert([{ email, organization_id, invited_by }])
+      .select()
+      .single();
 
     if (insertError) {
+      console.error("Insert error:", insertError);
       return new Response(JSON.stringify({ error: insertError.message }), {
         status: 400,
       });
     }
 
-    return new Response(JSON.stringify({ success: true }), {
+    return new Response(JSON.stringify({ success: true, invite }), {
       status: 200,
     });
 
   } catch (err) {
-    return new Response(JSON.stringify({ error: "Unexpected error" }), {
+    console.error("Unexpected error:", err);
+    return new Response(JSON.stringify({ error: String(err) }), {
       status: 500,
     });
   }

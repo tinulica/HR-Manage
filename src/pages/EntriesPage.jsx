@@ -1,6 +1,6 @@
 // src/pages/EntriesPage.jsx
 import { useContext, useEffect, useState, useMemo } from 'react';
-import { SupabaseContext } from '../App';
+import SupabaseContext from '../contexts/SupabaseContext';
 import EditEntryModal   from '../components/EditEntryModal';
 import AddEntryModal    from '../components/AddEntryModal';
 import EntriesExport    from '../components/EntriesExport';

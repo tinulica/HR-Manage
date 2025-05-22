@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { supabase } from '../supabaseClient'
+import { useContext } from 'react';
+import { SupabaseContext } from '../App';
 import './AddEntryModal.css'
 
 export default function AddEntryModal({ onClose, onAdded }) {
@@ -11,7 +12,7 @@ export default function AddEntryModal({ onClose, onAdded }) {
     collab_type: 'angajare'
   })
   const [loading, setLoading] = useState(false)
-
+const supabase = useContext(SupabaseContext);
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value })
   }

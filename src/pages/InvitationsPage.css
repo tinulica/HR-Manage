@@ -1,0 +1,92 @@
+/* InvitationsPage.css */
+
+.invitations-page {
+  max-width: 800px;
+  margin: 80px auto 0;
+  padding: 1.5rem;
+  background: #ffffff;
+  border-radius: 0.5rem;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+}
+
+.invitations-page h1,
+.invitations-page h2 {
+  margin-bottom: 1rem;
+  color: #111827;
+}
+
+.invitations-page h1 {
+  text-align: center;
+  font-size: 1.75rem;
+}
+
+.invitations-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1rem;
+}
+
+.invitations-table th,
+.invitations-table td {
+  padding: 0.75rem;
+  border: 1px solid #e5e7eb;
+  text-align: left;
+}
+
+.btn {
+  padding: 0.25rem 0.5rem;
+  border: none;
+  border-radius: 0.25rem;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+.btn.gray {
+  background-color: #6b7280;
+  color: #ffffff;
+}
+
+.btn.red {
+  background-color: #ef4444;
+  color: #ffffff;
+}
+
+.btn.small {
+  font-size: 0.75rem;
+  padding: 0.25rem 0.5rem;
+}
+
+.badge {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.badge-pending  { background: #fef3c7; color: #92400e; } /* amber-100/800 */
+.badge-accepted { background: #d1fae5; color: #065f46; } /* green-100/800 */
+.badge-revoked  { background: #e5e7eb; color: #374151; } /* gray-200/700 */
+
+.error {
+  color: #dc2626;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: inline-block;
+  vertical-align: middle;
+}
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+a:hover .avatar {
+  box-shadow: 0 0 0 2px var(--primary);
+}

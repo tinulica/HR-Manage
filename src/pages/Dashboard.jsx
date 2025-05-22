@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import { supabase } from '../supabaseClient'
+import { useContext } from 'react';
+import { SupabaseContext } from '../App';
 import {
   ResponsiveContainer,
   PieChart,
@@ -18,6 +19,8 @@ export default function Dashboard() {
   const [entries, setEntries] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+const supabase = useContext(SupabaseContext);
+
 
   useEffect(() => {
     const fetchData = async () => {

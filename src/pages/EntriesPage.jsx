@@ -1,10 +1,10 @@
 // src/pages/EntriesPage.jsx
-import React, { useEffect, useState, useMemo } from 'react'
-import { supabase } from '../supabaseClient'
-import EditEntryModal from '../components/EditEntryModal'
-import AddEntryModal from '../components/AddEntryModal'
-import EntriesExport from '../components/EntriesExport'
-import './EntriesPage.css'
+import { useContext, useEffect, useState, useMemo } from 'react';
+import { SupabaseContext } from '../App';
+import EditEntryModal   from '../components/EditEntryModal';
+import AddEntryModal    from '../components/AddEntryModal';
+import EntriesExport    from '../components/EntriesExport';
+import './EntriesPage.css';
 import {
   Plus,
   Upload,
@@ -12,12 +12,13 @@ import {
   ChevronLeft,
   ChevronRight,
   Pencil
-} from 'lucide-react'
-import * as XLSX from 'xlsx'
+} from 'lucide-react';
+import * as XLSX from 'xlsx';
 
 function ImportModal({ onClose, onImport }) {
-  const [file, setFile] = useState(null)
-  const [platform, setPlatform] = useState('glovo')
+  const supabase = useContext(SupabaseContext);
+  const [file, setFile] = useState(null);
+  const [platform, setPlatform] = useState('glovo');
 
   return (
     <div className="modal-backdrop">
@@ -42,7 +43,8 @@ function ImportModal({ onClose, onImport }) {
           <button
             className="btn blue"
             onClick={() =>
-              file ? onImport(platform, file) : alert('Selectează un fișier Excel')
+              file ? onImport(platform, file, supabase) 
+                   : alert('Selectează un fișier Excel')
             }
           >
             Importă
@@ -53,62 +55,62 @@ function ImportModal({ onClose, onImport }) {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 export default function EntriesPage() {
-  const [entries, setEntries] = useState([])
-  const [rawReports, setRawReports] = useState([])
-  const [search, setSearch] = useState('')
-  const [filterStatus, setFilterStatus] = useState('all')
-  const [filterPlatform, setFilterPlatform] = useState('')
-  const [selectedIds, setSelectedIds] = useState([])
-  const [currentPage, setCurrentPage] = useState(1)
-  const pageSize = 12
+  const supabase = useContext(SupabaseContext);
 
-  const [showAdd, setShowAdd] = useState(false)
-  const [showEdit, setShowEdit] = useState(false)
-  const [showImport, setShowImport] = useState(false)
-  const [editEntry, setEditEntry] = useState(null)
+  const [entries, setEntries]         = useState([]);
+  const [rawReports, setRawReports]   = useState([]);
+  const [search, setSearch]           = useState('');
+  const [filterStatus, setFilterStatus]   = useState('all');
+  const [filterPlatform, setFilterPlatform] = useState('');
+  const [selectedIds, setSelectedIds] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 12;
 
-  // 1) Încarcă din entries
+  const [showAdd, setShowAdd]       = useState(false);
+  const [showEdit, setShowEdit]     = useState(false);
+  const [showImport, setShowImport] = useState(false);
+  const [editEntry, setEditEntry]   = useState(null);
+
   useEffect(() => {
-    loadEntries()
-    loadRawReports()
-  }, [])
+    loadEntries();
+    loadRawReports();
+  }, []);
 
   async function loadEntries() {
-    const { data: { session } } = await supabase.auth.getSession()
-    const userId = session?.user?.id
-    if (!userId) return
+    const { data: { session } } = await supabase.auth.getSession();
+    const userId = session?.user?.id;
+    if (!userId) return;
 
     const { data: prof } = await supabase
       .from('profiles')
       .select('organization_id')
       .eq('id', userId)
-      .single()
-    if (!prof?.organization_id) return
+      .single();
+    if (!prof?.organization_id) return;
 
     const { data, error } = await supabase
       .from('entries')
-      .select(
-        `id,
-         nume,
-         prenume,
-         email,
-         telefon,
-         platforma,
-         created_at,
-         salariu_total,
-         modified`
-      )
+      .select(`
+        id,
+        nume,
+        prenume,
+        email,
+        telefon,
+        platforma,
+        created_at,
+        salariu_total,
+        modified
+      `)
       .eq('organization_id', prof.organization_id)
-      .order('created_at', { ascending: false })
+      .order('created_at', { ascending: false });
 
     if (error) {
-      console.error('Load entries error:', error)
+      console.error('Load entries error:', error);
     } else {
-      // unificăm schema în full_name, phone, platform, created_at, salariu_total
       setEntries(
         (data || []).map(e => ({
           id: e.id,
@@ -120,40 +122,39 @@ export default function EntriesPage() {
           salariu_total: e.salariu_total,
           modified: e.modified
         }))
-      )
+      );
     }
   }
 
-  // 2) Încarcă din report_raw (fallback)
   async function loadRawReports() {
-    const { data: { session } } = await supabase.auth.getSession()
-    const userId = session?.user?.id
-    if (!userId) return
+    const { data: { session } } = await supabase.auth.getSession();
+    const userId = session?.user?.id;
+    if (!userId) return;
 
     const { data: prof } = await supabase
       .from('profiles')
       .select('organization_id')
       .eq('id', userId)
-      .single()
-    if (!prof?.organization_id) return
+      .single();
+    if (!prof?.organization_id) return;
 
     const { data, error } = await supabase
       .from('report_raw')
-      .select(
-        `id,
-         entry_id,
-         full_name,
-         email,
-         phone,
-         platform,
-         report_date,
-         gross_amount as salariu_total`
-      )
+      .select(`
+        id,
+        entry_id,
+        full_name,
+        email,
+        phone,
+        platform,
+        report_date,
+        gross_amount as salariu_total
+      `)
       .eq('organization_id', prof.organization_id)
-      .order('imported_at', { ascending: false })
+      .order('imported_at', { ascending: false });
 
     if (error) {
-      console.error('Load rawReports error:', error)
+      console.error('Load rawReports error:', error);
     } else {
       setRawReports(
         (data || []).map(r => ({
@@ -166,87 +167,81 @@ export default function EntriesPage() {
           salariu_total: r.salariu_total,
           modified: false
         }))
-      )
+      );
     }
   }
 
-  // alege dataset (entries > 0 ? entries : rawReports)
-  const dataset = entries.length > 0 ? entries : rawReports
+  const dataset = entries.length > 0 ? entries : rawReports;
 
-  // colectăm platforme din dataset
   const platforms = useMemo(
     () => [...new Set(dataset.map(e => e.platform).filter(Boolean))],
     [dataset]
-  )
+  );
 
-  // filtru & căutare
   const filtered = useMemo(() => {
     return dataset.filter(e => {
-      const txt = search.toLowerCase()
+      const txt = search.toLowerCase();
       const okSearch =
         e.full_name.toLowerCase().includes(txt) ||
         (e.email || '').toLowerCase().includes(txt) ||
-        (e.phone || '').includes(txt)
+        (e.phone || '').includes(txt);
       const okStatus =
         filterStatus === 'all' ||
         (filterStatus === 'modified' && e.modified) ||
-        (filterStatus === 'draft' && !e.modified)
-      const okPlat = !filterPlatform || e.platform === filterPlatform
-      return okSearch && okStatus && okPlat
-    })
-  }, [dataset, search, filterStatus, filterPlatform])
+        (filterStatus === 'draft' && !e.modified);
+      const okPlat = !filterPlatform || e.platform === filterPlatform;
+      return okSearch && okStatus && okPlat;
+    });
+  }, [dataset, search, filterStatus, filterPlatform]);
 
-  // paginare
-  const total = filtered.length
-  const totalPages = Math.ceil(total / pageSize)
-  const pageData = useMemo(() => {
-    const start = (currentPage - 1) * pageSize
-    return filtered.slice(start, start + pageSize)
-  }, [filtered, currentPage])
+  const total      = filtered.length;
+  const totalPages = Math.ceil(total / pageSize);
+  const pageData   = useMemo(() => {
+    const start = (currentPage - 1) * pageSize;
+    return filtered.slice(start, start + pageSize);
+  }, [filtered, currentPage]);
 
-  // selecții
   const toggleSelect = id =>
     setSelectedIds(prev =>
       prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]
-    )
+    );
   const selectPage = e =>
     setSelectedIds(
       e.target.checked ? pageData.map(r => r.id) : []
-    )
-  const clearSel = () => setSelectedIds([])
+    );
+  const clearSel = () => setSelectedIds([]);
 
   async function deleteSelected() {
-    if (!selectedIds.length) return
-    if (!confirm(`Ștergi ${selectedIds.length} înregistrări?`)) return
+    if (!selectedIds.length) return;
+    if (!confirm(`Ștergi ${selectedIds.length} înregistrări?`)) return;
     const { error } = await supabase
       .from('entries')
       .delete()
-      .in('id', selectedIds)
-    if (error) alert('Eroare: ' + error.message)
+      .in('id', selectedIds);
+    if (error) alert('Eroare: ' + error.message);
     else {
-      clearSel()
-      loadEntries()
-      if (entries.length === 0) loadRawReports()
+      clearSel();
+      loadEntries();
+      if (entries.length === 0) loadRawReports();
     }
   }
 
-  // import
   async function handleImport(platform, file) {
-    const buf = await file.arrayBuffer()
-    const wb = XLSX.read(buf)
-    const sheet = wb.Sheets[wb.SheetNames[0]]
-    const rows = XLSX.utils.sheet_to_json(sheet, { defval: '' })
+    const buf = await file.arrayBuffer();
+    const wb  = XLSX.read(buf);
+    const sheet = wb.Sheets[wb.SheetNames[0]];
+    const rows  = XLSX.utils.sheet_to_json(sheet, { defval: '' });
 
-    const { data: { session } } = await supabase.auth.getSession()
-    const userId = session.user.id
+    const { data: { session } } = await supabase.auth.getSession();
+    const userId = session.user.id;
     const { data: prof } = await supabase
       .from('profiles')
       .select('organization_id')
       .eq('id', userId)
-      .single()
+      .single();
 
     const payload = rows.map(r => {
-      const nameParts = (r['Nume complet'] || '').split(' ')
+      const nameParts = (r['Nume complet'] || '').split(' ');
       return {
         nume: nameParts[0] || '',
         prenume: nameParts.slice(1).join(' ') || '',
@@ -256,20 +251,20 @@ export default function EntriesPage() {
         created_at: r['Data'] ? new Date(r['Data']).toISOString() : new Date().toISOString(),
         salariu_total: Number(r['Sumă'] || r['Venit brut'] || 0),
         organization_id: prof.organization_id
-      }
-    })
+      };
+    });
 
-    const { error } = await supabase.from('entries').insert(payload)
-    if (error) alert('Eroare import: ' + error.message)
+    const { error } = await supabase.from('entries').insert(payload);
+    if (error) alert('Eroare import: ' + error.message);
     else {
-      alert('Import reușit!')
-      loadEntries()
+      alert('Import reușit!');
+      loadEntries();
     }
-    setShowImport(false)
+    setShowImport(false);
   }
 
-  const start = (currentPage - 1) * pageSize + 1
-  const end = Math.min(currentPage * pageSize, total)
+  const start = (currentPage - 1) * pageSize + 1;
+  const end   = Math.min(currentPage * pageSize, total);
 
   return (
     <div className="entries-page">
@@ -293,12 +288,12 @@ export default function EntriesPage() {
             className="input"
             placeholder="Caută..."
             value={search}
-            onChange={e => { setSearch(e.target.value); setCurrentPage(1) }}
+            onChange={e => { setSearch(e.target.value); setCurrentPage(1); }}
           />
           <select
             className="input"
             value={filterStatus}
-            onChange={e => { setFilterStatus(e.target.value); setCurrentPage(1) }}
+            onChange={e => { setFilterStatus(e.target.value); setCurrentPage(1); }}
           >
             <option value="all">Toate</option>
             <option value="modified">Modificate</option>
@@ -307,7 +302,7 @@ export default function EntriesPage() {
           <select
             className="input"
             value={filterPlatform}
-            onChange={e => { setFilterPlatform(e.target.value); setCurrentPage(1) }}
+            onChange={e => { setFilterPlatform(e.target.value); setCurrentPage(1); }}
           >
             <option value="">Toate platformele</option>
             {platforms.map(p => <option key={p} value={p}>{p}</option>)}
@@ -360,7 +355,7 @@ export default function EntriesPage() {
               <td>
                 <button
                   className="icon-btn"
-                  onClick={() => { setEditEntry(e); setShowEdit(true) }}
+                  onClick={() => { setEditEntry(e); setShowEdit(true); }}
                 >
                   <Pencil size={16} />
                 </button>
@@ -396,12 +391,15 @@ export default function EntriesPage() {
       {showEdit && editEntry && (
         <EditEntryModal
           entry={editEntry}
-          onClose={() => { setShowEdit(false); loadEntries() }}
+          onClose={() => { setShowEdit(false); loadEntries(); }}
         />
       )}
       {showImport && (
-        <ImportModal onClose={() => setShowImport(false)} onImport={handleImport} />
+        <ImportModal
+          onClose={() => setShowImport(false)}
+          onImport={handleImport}
+        />
       )}
     </div>
-  )
+  );
 }

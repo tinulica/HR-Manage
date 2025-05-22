@@ -1,0 +1,69 @@
+/* InviteEmployeeModal.css */
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-box {
+  background: #ffffff;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  max-width: 400px;
+  width: 100%;
+}
+
+.modal-box h2 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-size: 1.25rem;
+  color: #111827;
+}
+
+.modal-box input[type="email"] {
+  width: 100%;
+  padding: 0.5rem;
+  margin-bottom: 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.25rem;
+  font-size: 1rem;
+  color: #111827;
+}
+
+.modal-box button {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  margin-right: 0.5rem;
+  border: none;
+  border-radius: 0.25rem;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.modal-box button:first-of-type {
+  background-color: #3b82f6; /* blue */
+  color: #ffffff;
+}
+
+.modal-box button:last-of-type {
+  background-color: #6b7280; /* gray */
+  color: #ffffff;
+}
+
+.modal-box .success {
+  margin-top: 0.75rem;
+  color: #16a34a; /* green */
+  font-size: 0.95rem;
+}
+
+.modal-box .error {
+  margin-top: 0.75rem;
+  color: #dc2626; /* red */
+  font-size: 0.95rem;
+}

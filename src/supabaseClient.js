@@ -1,7 +1,33 @@
 // src/supabaseClient.js
-import { createClient } from '@supabase/supabase-js'
+import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = 'https://fxvuvhnprzrtdbizziab.supabase.co'
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ4dnV2aG5wcnpydGRiaXp6aWFiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDczMTc1NjgsImV4cCI6MjA2Mjg5MzU2OH0.MU0YJhY6qQD2GFoiAqB8LHg1PHGg_NXNZRXP3FwBxXA'
+const SUPABASE_URL    = import.meta.env.VITE_SUPABASE_URL;
+const SUPABASE_ANON   = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
-export const supabase = createClient(supabaseUrl, supabaseKey)
+if (!SUPABASE_URL || !SUPABASE_ANON) {
+  throw new Error(
+    'Missing env vars: VITE_SUPABASE_URL and/or VITE_SUPABASE_ANON_KEY'
+  );
+}
+
+/**
+ * Create a Supabase client, optionally injecting a Bearer token.
+ * @param {string} [accessToken] Clerk-issued Supabase JWT
+ */
+export function createSupabaseClient(accessToken) {
+  const options = {
+    auth: {
+      persistSession:     false,
+      detectSessionInUrl: false,
+      autoRefreshToken:   false,
+    },
+  };
+
+  if (accessToken) {
+    options.global = {
+      headers: { Authorization: `Bearer ${accessToken}` },
+    };
+  }
+
+  return createClient(SUPABASE_URL, SUPABASE_ANON, options);
+}
